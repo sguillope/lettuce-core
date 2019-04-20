@@ -76,7 +76,7 @@ public class CommandDetailParser {
             }
 
             Collection<?> collection = (Collection<?>) o;
-            if (collection.size() != COMMAND_INFO_SIZE) {
+            if (collection.size() < COMMAND_INFO_SIZE) {
                 continue;
             }
 
@@ -98,6 +98,7 @@ public class CommandDetailParser {
 
         Set<CommandDetail.Flag> parsedFlags = parseFlags(flags);
 
+        // TODO: Extract command grouping (ACL)
         return new CommandDetail(name, arity, parsedFlags, firstKey, lastKey, keyStepCount);
     }
 
