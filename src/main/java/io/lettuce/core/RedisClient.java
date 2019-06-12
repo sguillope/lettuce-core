@@ -557,7 +557,7 @@ public class RedisClient extends AbstractRedisClient {
             String clientName = LettuceStrings.isNotEmpty(uri.getClientName()) ? uri.getClientName() : redisURI.getClientName();
 
             Mono<StatefulRedisSentinelConnection<K, V>> connectionMono = Mono
-                    .defer(() -> Mono.fromCompletionStage(doConnectSentinelAsync(codec, clientName, uri, timeout)))
+                    .fromCompletionStage(() -> doConnectSentinelAsync(codec, clientName, uri, timeout))
                     .onErrorMap(CompletionException.class, Throwable::getCause)
                     .onErrorMap(e -> new RedisConnectionException("Cannot connect Redis Sentinel at " + uri, e))
                     .doOnError(exceptionCollector::add);
