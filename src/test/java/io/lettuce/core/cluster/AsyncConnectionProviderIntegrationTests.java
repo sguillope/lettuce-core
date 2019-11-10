@@ -17,12 +17,14 @@ package io.lettuce.core.cluster;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assumptions.assumeThat;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.Duration;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -237,7 +239,7 @@ class AsyncConnectionProviderIntegrationTests {
     @Test
     void shouldCloseAsync() throws Exception {
 
-        assumeTrue(System.getProperty("os.name").toLowerCase().contains("mac"));
+        assumeThat(System.getProperty("os.name").toLowerCase()).contains("mac");
 
         Socket socket = new Socket("localhost", serverSocket.getLocalPort());
         CountDownLatch connectInitiated = new CountDownLatch(1);
@@ -245,7 +247,7 @@ class AsyncConnectionProviderIntegrationTests {
         ClusterClientOptions clientOptions = ClusterClientOptions.builder()
                 .socketOptions(SocketOptions.builder().connectTimeout(1, TimeUnit.SECONDS).build()).build();
 
-        redisClient.setOptions(clientOptions);
+        client.setOptions(clientOptions);
 
         ConnectionKey connectionKey = new ConnectionKey(ClusterConnectionProvider.Intent.READ, TestSettings.host(),
                 TestSettings.port());
