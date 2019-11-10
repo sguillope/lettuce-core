@@ -286,7 +286,7 @@ public class GeoCommandIntegrationTests extends TestSupport {
 
         List<Value<String>> geohash = redis.geohash(key, "Weinheim", "Bahn", "dunno");
 
-        assertThat(geohash).containsSequence(Value.just("u0y1v0kffz0"), Value.just("u0y1vhvuvm0"), Value.empty());
+        assertThat(geohash).containsSequence(Value.just("u0y1v0kffz"), Value.just("u0y1vhvuvm"), Value.empty());
     }
 
     @Test
@@ -314,7 +314,7 @@ public class GeoCommandIntegrationTests extends TestSupport {
 
         List<Value<String>> geohash = exec.get(1);
 
-        assertThat(geohash).containsSequence(Value.just("u0y1v0kffz0"), Value.just("u0y1vhvuvm0"), Value.empty());
+        assertThat(geohash).containsSequence(Value.just("u0y1v0kffz"), Value.just("u0y1vhvuvm"), Value.empty());
     }
 
     @Test

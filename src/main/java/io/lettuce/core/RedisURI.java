@@ -985,6 +985,7 @@ public class RedisURI implements Serializable, ConnectionPoint {
         private int port;
         private int database;
         private String clientName;
+        private String username;
         private char[] password;
         private char[] sentinelPassword;
         private boolean ssl = false;
@@ -1276,6 +1277,22 @@ public class RedisURI implements Serializable, ConnectionPoint {
         /**
          * Configures authentication.
          *
+         * @param username the user name
+         * @param password the password name
+         * @return the builder
+         */
+        public Builder withAuthentication(String username, CharSequence password) {
+
+            LettuceAssert.notNull(username, "User name must not be null");
+            LettuceAssert.notNull(password, "Password must not be null");
+
+            this.username = username;
+            return withPassword(password);
+        }
+
+        /**
+         * Configures authentication.
+         *
          * @param password the password
          * @return the builder
          * @deprecated since 6.0. Use {@link #withPassword(CharSequence)} or {@link #withPassword(char[])} avoid String caching.
@@ -1301,7 +1318,7 @@ public class RedisURI implements Serializable, ConnectionPoint {
 
             char[] chars = new char[password.length()];
             for (int i = 0; i < password.length(); i++) {
-                chars[i] = password.charAt(0);
+                chars[i] = password.charAt(i);
             }
 
             return withPassword(chars);
@@ -1364,6 +1381,10 @@ public class RedisURI implements Serializable, ConnectionPoint {
             RedisURI redisURI = new RedisURI();
             redisURI.setHost(host);
             redisURI.setPort(port);
+
+            if (username != null) {
+                redisURI.setUsername(username);
+            }
 
             if (password != null) {
                 redisURI.setPassword(password);

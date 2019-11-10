@@ -141,7 +141,7 @@ class ConnectionCommandIntegrationTests extends TestSupport {
             TestFutures.awaitOrTimeout(async.auth("invalid"));
             fail("Authenticated with invalid password");
         } catch (RedisException e) {
-            assertThat(e.getMessage()).isEqualTo("ERR Client sent AUTH, but no password is set");
+            assertThat(e.getMessage()).startsWith("ERR").contains("AUTH");
             StatefulRedisConnection<String, String> statefulRedisCommands = async.getStatefulConnection();
             assertThat(ReflectionTestUtils.getField(statefulRedisCommands, "password")).isNull();
         } finally {
