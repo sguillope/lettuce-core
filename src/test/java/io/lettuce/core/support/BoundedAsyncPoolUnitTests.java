@@ -64,10 +64,32 @@ class BoundedAsyncPoolUnitTests {
     }
 
     @Test
+    void shouldCreateObjectWhenMaxTotalIsNegative() {
+
+        BoundedAsyncPool<String> pool = new BoundedAsyncPool<>(STRING_OBJECT_FACTORY, BoundedPoolConfig.builder().maxTotal(-1)
+                .build());
+
+        String object = Futures.get(pool.acquire());
+
+        assertThat(pool.getIdle()).isEqualTo(0);
+        assertThat(object).isEqualTo("1");
+    }
+
+    @Test
     void shouldCreateMinIdleObject() {
 
         BoundedAsyncPool<String> pool = new BoundedAsyncPool<>(STRING_OBJECT_FACTORY, BoundedPoolConfig.builder().minIdle(2)
                 .build());
+
+        assertThat(pool.getIdle()).isEqualTo(2);
+        assertThat(pool.getObjectCount()).isEqualTo(2);
+    }
+
+    @Test
+    void shouldCreateMinIdleObjectWhenMaxTotalIsNegative() {
+
+        BoundedAsyncPool<String> pool = new BoundedAsyncPool<>(STRING_OBJECT_FACTORY, BoundedPoolConfig.builder().maxTotal(-1)
+                .minIdle(2).build());
 
         assertThat(pool.getIdle()).isEqualTo(2);
         assertThat(pool.getObjectCount()).isEqualTo(2);
